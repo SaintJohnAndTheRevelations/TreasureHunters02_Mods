@@ -1,0 +1,113 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_QuestDef_State("CollectSpriteStoolForVaccine", "Started", 1);
+DB_QuestDef_State("CollectSpriteStoolForVaccine", "Completed", 1);
+DB_QuestDef_State("CollectSpriteStoolForVaccine", "GotPermission", 1);
+DB_QuestDef_State("CollectSpriteStoolForVaccine", "BlaeMissionStart", 1);
+DB_QuestDef_State("CollectSpriteStoolForVaccine", "BlaeMissionEnd", 1);
+
+DB_QuestDef_State("AddVaccineToFood", "Started", 1);
+DB_QuestDef_State("AddVaccineToFood", "Completed", 1);
+DB_QuestDef_State("AddVaccineToFood", "FoundMap", 1);
+DB_QuestDef_State("AddVaccineToFood", "WhoHasMap", 1);
+DB_QuestDef_State("AddVaccineToFood", "VaccineCombined", 1);
+
+
+DB_QuestDef_State("FindDragonEgg", "Started", 1);
+DB_QuestDef_State("FindDragonEgg", "Completed", 1);
+
+DB_QuestDef_State("WelcomeToTreasureHunters2", "Started", 1);
+KBSECTION
+//Level One
+
+IF
+CharacterLeftTrigger(_character, StartGameEventTrigger_1ab517d1-82da-41a3-b99b-1d9a02642101)
+AND
+GlobalGetFlag("GAMESTARTED", 0)
+THEN
+PartyAddExperience(_character, 1, 1, 5601);
+GlobalSetFlag("GAMESTARTED");
+ContainerIdentifyAll(ArmourChest_2e8ffa01-d39d-4ff2-a2bf-17795c8f3c55);
+CharacterMoveToAndTalk(TRHU_Wik_000_3091a068-26e4-4ed1-9a3e-60833819bbc3, _character, "WikIntro", 1, "", 0, 50.0);
+ObjectSetFlag(_character, "QuestUpdate_WelcomeToTreasureHunters2_Started");
+CharacterAddAbility(_character, "Loremaster", 1);
+CharacterAddAbility(_character, "Thievery", 1);
+ShowMapMarker(_character, "TenretniEgg", 1);
+
+
+IF
+CharacterLeftTrigger(_character, StartGameEventTrigger_1ab517d1-82da-41a3-b99b-1d9a02642101)
+THEN
+SetFaction(_character, "Hero");
+
+IF
+ObjectFlagSet("QuestUpdate_FindDragonEgg_Started", _character, _)
+THEN
+ItemTemplateAddTo("TRHU_GoHome_Pipe_d978f1b6-a96f-4dbc-90c9-49fb8b46cba4", _character, 1, 1);
+ItemTemplateAddTo("TRHU_Dragon_Vaccine_ee378a4b-1152-4a4d-a08f-599df4c9e7d6", _character, 1, 1);
+
+IF
+CharacterUsedItemTemplate(_character, "TRHU_TenretniEgg_3b265e6d-189c-49ff-9293-3de4c816582e", _item)
+AND
+GlobalGetFlag("VACCINATEDEGG", 0)
+THEN
+Proc_StartDialog(0, "ApplyVaccineToEgg", _character,  NULL_00000000-0000-0000-0000-000000000000);
+GlobalSetFlag("VACCINATEDEGG");
+GlobalSetFlag("TELEPORTAFTEREGG");
+
+IF
+GlobalFlagSet("TENRETNIEGGVACCINATED")
+AND
+DB_IsPlayer(_character)
+THEN
+PartyAddExperience(_character, 1, 1, 100);
+ObjectSetFlag(_character, "QuestUpdate_FindDragonEgg_Completed");
+ItemTemplateRemoveFrom("TRHU_Dragon_Vaccine_ee378a4b-1152-4a4d-a08f-599df4c9e7d6", _character, 1);
+
+//Level Two
+
+IF
+ObjectFlagSet("QuestUpdate_AddVaccineToFood_Started", _character, _)
+THEN
+ItemTemplateAddTo("ITEMGUID_TRHU_Incomplete_Dragon_Vaccine_b5f41bdc-32b9-44ca-b648-9fa6812b6f65", _character, 1, 1);
+GlobalSetFlag("TELEPORTAFTERSTARTSECONDLEVEL");
+
+IF
+CharacterUsedItemTemplate(_character, "TRHU_MapToTenretni_e258cb81-3fd1-47cb-9c81-15da48493202", _)
+THEN
+GlobalSetFlag("BOATMARKER");
+
+IF
+ItemTemplateAddedToCharacter(ITEMGUID_TRHU_MapToTenretni_e258cb81-3fd1-47cb-9c81-15da48493202, _item, _character)
+THEN
+GlobalSetFlag("BOATMARKER");
+
+
+
+IF
+DialogStarted("WikSecondMissionClose", _int)
+AND
+DB_IsPlayer(_character)
+AND
+CharacterGetDisplayName(_character, _, _name)
+THEN
+DialogSetVariableString("WikSecondMissionClose", "TRHU_PlayerName_264dc051-e242-4298-8165-eda37dcdcedf", _name);
+
+IF
+CharacterEnteredTrigger(_character, StartLevelThreeEventTrigger_4fc64d15-b510-4761-af7a-3f0dcf1f0aca)
+THEN
+CharacterMoveToAndTalk(TRHU_Wik_Level_Three_84d9e81d-aba7-854c-3a43-d7e96b47900f, _character, "WikSecondMissionClose", 1,"", 0, 20.0);
+//QuestClose(_character, "AddVaccineToFood");
+
+IF
+GlobalFlagSet("GAMESUCCESS")
+AND
+DB_IsPlayer(_character)
+THEN
+QuestClose(_character, "AddVaccineToFood");
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "__Start"

@@ -1,0 +1,105 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterItemEvent(_character, _item, _itemEvent)
+AND
+IsTagged(_item, "KonamiButton", _state)
+AND
+_itemEvent != ""
+AND
+_itemEvent != "Start"
+THEN
+PROC_EnterKonamiCode(_character, _itemEvent);
+DisplayText(_character, _itemEvent);
+
+PROC
+PROC_EnterKonamiCode((GUIDSTRING)_character, (STRING)_itemEvent)
+AND
+GetVarString(_character, "KonamiAttempt", _attempt)
+AND
+StringConcatenate(_attempt, _itemEvent, _attemptEntry)
+THEN
+SetVarString(_character, "KonamiAttempt", _attemptEntry);
+
+PROC
+PROC_TryKonamiCode((GUIDSTRING)_character)
+AND
+GetVarString(_character, "KonamiAttempt", _attempt)
+AND
+_attempt == "UpDownUpDownLeftRightLeftRightBA"
+AND
+GlobalGetFlag("KONAMIEXPGIVEN", 0)
+THEN
+PartyAddExperience((CHARACTERGUID)_character, 1, 1, 100);
+ItemDestroy(DragonNurseryBarrierMagicWall_34398e5c-8c40-42f6-aa90-c230bd97e134);
+TimerLaunch("WallTenderTimer", 4000);
+TimerLaunch("WallTenderTalkTimer", 6000);
+GlobalSetFlag("KONAMIEXPGIVEN");
+DisplayText(_character, "Success!!!");
+
+IF
+TimerFinished("WallTenderTimer")
+THEN
+CharacterAppearAt(TRHU_Irmell_Nephets_000_e399ac4b-df61-4a9c-8915-75084caadf85, WallTenderAppearPointTrigger_f5de7f5d-52c7-47a4-a02f-82ecfb3e00a0, 1, "walltenderspawned");
+
+
+IF
+TimerFinished("WallTenderTalkTimer")
+THEN
+DisplayText(TRHU_Irmell_Nephets_000_e399ac4b-df61-4a9c-8915-75084caadf85, "The Wall!!! I will stop the Caravan from getting through...");
+
+PROC
+PROC_TryKonamiCode((GUIDSTRING)_character)
+AND
+GetVarString(_character, "KonamiAttempt", _attempt)
+AND
+_attempt != "UpDownUpDownLeftRightLeftRightBA"
+THEN
+DisplayText(_character, _attempt);
+//DisplayText(_character, "Why doesn't it ever work the first time? Try again.");
+SetVarString(_character, "KonamiAttempt", "");
+
+IF
+CharacterItemEvent(_character, Start_1f218dae-3669-4a80-be52-cad0960954dd, _)
+AND
+GetVarString(_character, "KonamiAttempt", _attempt)
+AND
+_attempt != "UpDownUpDownLeftRightLeftRightBA"
+THEN
+//DisplayText(_character, _attempt);
+DisplayText(_character, "You pressed Start, but nothing happened. Try the code again.");
+SetVarString(_character, "KonamiAttempt", "");
+//DisplayText(_character, "Pressed Start");
+
+IF
+CharacterItemEvent(_character, Start_1f218dae-3669-4a80-be52-cad0960954dd, _)
+AND
+GetVarString(_character, "KonamiAttempt", _attempt)
+AND
+_attempt == "UpDownUpDownLeftRightLeftRightBA"
+AND
+GlobalGetFlag("KONAMIEXPGIVEN", 0)
+THEN
+DisplayText(_character, "Success!!!");
+PartyAddExperience((CHARACTERGUID)_character, 1, 1, 100);
+ItemDestroy(DragonNurseryBarrierMagicWall_34398e5c-8c40-42f6-aa90-c230bd97e134);
+TimerLaunch("WallTenderTimer", 4000);
+TimerLaunch("WallTenderTalkTimer", 6000);
+GlobalSetFlag("KONAMIEXPGIVEN");
+
+
+
+IF
+CharacterEnteredTrigger(_character, StartButtonEventTrigger_f9d46a3c-b96d-4bb0-bb80-120a52b29583)
+AND
+GlobalGetFlag("KONAMIATTEMPTSET", 0)
+THEN
+SetVarString(_character, "KonamiAttempt", "");
+GlobalSetFlag("KONAMIATTEMPTSET");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelOne"

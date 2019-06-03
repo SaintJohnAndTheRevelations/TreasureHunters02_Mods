@@ -1,0 +1,59 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterLeftTrigger(_character, StartGameEventTrigger_1ab517d1-82da-41a3-b99b-1d9a02642101)
+AND
+ObjectGetFlag(_character, "GOTCHEAT", 0)
+THEN
+//ItemTemplateAddTo("TRHU_CheatPipe_38bf875b-c503-4358-b369-d76f0f886fbe", _character, 1, 1);
+ObjectSetFlag(_character, "GOTCHEAT");
+
+
+
+IF
+CharacterUsedItemTemplate(_character, "TRHU_CheatPipe_38bf875b-c503-4358-b369-d76f0f886fbe", _item)
+THEN
+PartyAddExperience(_character, 1, 1, 560100);
+CharacterAddAttribute(_character, "Intelligence", 30);
+CharacterAddAttribute(_character, "Strength", 30);
+CharacterAddAttribute(_character, "Wits", 30);
+CharacterAddAttribute(_character, "Constitution", 30);
+CharacterAddAttribute(_character, "Finesse", 30);
+CharacterAddAttribute(_character, "Memory", 30);
+CharacterAddSourcePoints(_character, 50);
+CharacterAddSkill(_character, "Shout_Ignition", 1);
+CharacterAddAbility(_character, "FireSpecialist", 10);
+CharacterAddAbility(_character, "RangerLore", 10);
+CharacterAddAbility(_character, "WarriorLore", 10);
+CharacterAddAbility(_character, "EarthSpecialist", 10);
+CharacterAddAbility(_character, "Necromancy", 10);
+CharacterAddAbility(_character, "Polymorph", 10);
+CharacterAddAbility(_character, "Summoning", 10);
+CharacterAddAbility(_character, "RogueLore", 10);
+CharacterAddAbility(_character, "PainReflection", 10);
+CharacterAddAbility(_character, "DualWielding", 10);
+CharacterAddAbility(_character, "TwoHanded", 10);
+CharacterAddSkill(_character, "Projectile_ChainLightning", 1);
+CharacterAddSkill(_character, "Shout_Supernova", 1);
+CharacterAddSkill(_character, "Storm_EnemyBlood", 1);
+CharacterAddAbility(_character, "AirSpecialist", 10);
+CharacterAddAbility(_character, "FireRestance", 100);
+CharacterAddAbility(_character, "EarthRestance", 100);
+CharacterAddAbility(_character, "WaterRestance", 100);
+ItemTemplateAddTo("ITEMGUID_TRHU_TenretniEgg_3b265e6d-189c-49ff-9293-3de4c816582e", _character, 1, 1);
+//ItemTemplateAddTo("ITEMGUID_TRHU_Sprite_Stool_12375756-2c14-43cc-962d-f85c9b811cd5", _character, 1, 1);
+//ItemTemplateAddTo("ITEMGUID_TRHU_MapToTenretni_e258cb81-3fd1-47cb-9c81-15da48493202", _character, 1, 1);
+//ItemTemplateAddTo("ITEMGUID_TRHU_Entrails_a2e8346f-2ef7-473a-b580-461c09a522ba", _character, 1, 1);
+//CharacterTeleportPartiesToTrigger(TestKonamiTeleportTrigger_c3b35be8-7a7b-4116-8488-b039afcaf434, "");
+
+IF
+CharacterUsedItem(_character, ArmourChest_2e8ffa01-d39d-4ff2-a2bf-17795c8f3c55)
+THEN
+ContainerIdentifyAll(ArmourChest_2e8ffa01-d39d-4ff2-a2bf-17795c8f3c55);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "__Start"

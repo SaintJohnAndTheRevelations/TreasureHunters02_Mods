@@ -1,0 +1,87 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_HerbDogsFight(TRHU_HerbDog01_000_2b09f322-6233-4a35-8164-0a32c2a8378d);
+DB_HerbDogsFight(TRHU_HerbDog02_000_50c92401-aa35-4473-a1da-3bda0940b49c);
+DB_HerbDogsFight(TRHU_HerbDog03_000_7102b419-bd69-4c36-be8e-449cd1d666c2);
+DB_HerbDogsFight(TRHU_Blae_Drock_000_750f2fc9-5daf-4413-9c44-86286fcca6d7);
+DB_HerbDogsFight(Lizards_Female_Clothing_001_8f17296f-a56c-4b60-aadd-9f7fdf50955c);
+DB_HerbDogsFight(Humans_Male_Tarquin_000_f19164d0-1734-4eb1-9b7e-693bc3cdc1bc);
+DB_HerbDogsFight(Lizards_Male_Clothing_000_e94f276d-424e-4e85-9206-8032fcfa5ee7);
+DB_HerbDogsFight(DW_Human_Commoner_F_000_2ff1c017-6a61-44e9-8045-360614c82ec8);
+DB_HerbDogsFight(Elves_Male_Clothing_002_ab086394-2295-4e98-8f7f-a0b142a94fef);
+DB_HerbDogsFight(Lizards_Male_Armor_000_d245467b-34e5-4902-b3b5-3074c38bb5ce);
+DB_HerbDogsFight(DW_Dwarf_Commoner_M_001_14eb8aec-fdf2-47e6-b08a-1eba9f6dbf99);
+DB_HerbDogsFight(Lizards_Female_Armor_000_7c6aa2d8-61ac-43ce-b15c-97f2ea13782e);
+DB_HerbDogsFight(Lizards_Male_Clothing_Civilian_C_001_b24936df-e59c-427a-84bd-07e80bcb927d);
+DB_HerbDogsFight(DW_Human_Commoner_M_00_d1681daf-b5c7-45e3-903b-6b737c884a29);
+DB_HerbDogsFight(Lizards_Female_Clothing_000_ebeba020-3afa-4d5e-ad8d-2dab862c94c6);
+DB_HerbDogsFight(Lizards_Male_Clothing_Civilian_C_000_5c5607a4-b0b0-4675-aaff-564d355d99c2);
+DB_HerbDogsFight(Elves_Male_Clothing_000_b45f750e-1614-4df9-b2a5-761fd7ef476d);
+DB_HerbDogsFight(DW_Dwarf_Commoner_F_002_f4d49e7a-4113-4e6a-8d98-c73292ce0d88);
+DB_HerbDogsFight(Elves_Female_Clothing_001_ea3f2ddd-2c91-4099-90cc-cca725da5ed0);
+DB_HerbDogsFight(Elves_Female_Clothing_000_447aedcd-e4ad-423a-a55f-5673d76022dd);
+DB_HerbDogsFight(Dwarves_Male_Clothing_000_9ce1d47b-0506-4c57-a602-a4d03a6aad9b);
+DB_HerbDogsFight(Humans_Male_Clothing_Rich_002_b947d6f7-e476-446c-ac72-a0d86fcbc1ef);
+DB_HerbDogsFight(DW_Dwarf_Commoner_F_001_40ad55ca-b4c4-4e61-ba2e-d16b91afd59f);
+DB_HerbDogsFight(Dwarves_Female_Clothing_001_a43e191a-5717-4940-a915-0a7ac880c3a7);
+DB_HerbDogsFight(Humans_Female_Clothing_002_8a7adc30-0b5b-42ad-9841-36c84ad71e4f);
+DB_HerbDogsFight(Elves_Male_Clothing_001_a4977b93-a226-477f-b953-c04eaa432ab9);
+DB_HerbDogsFight(CHARACTERGUID_Humans_Male_Clothing_Rich_001_a2a4ab25-95ca-476b-a09d-deb16fa5937e);
+DB_HerbDogsFight(CHARACTERGUID_Elves_Female_Clothing_000_447aedcd-e4ad-423a-a55f-5673d76022dd);
+
+DB_Herbs(TRHU_Sprite_Stool_004_035ead8f-8c20-4995-b459-cbe40731e145);
+DB_Herbs(TRHU_Sprite_Stool_006_4e23f015-327a-48bb-9be3-bd24288fb8d4);
+DB_Herbs(TRHU_Sprite_Stool_005_bd6a91b5-6944-4c99-ace4-e61e6bff5918);
+KBSECTION
+PROC
+PROC_SpriteStool((GUIDSTRING)_character)
+AND
+GlobalGetFlag("HASSPRITESTOOLPERMISSION", 1)
+AND
+GlobalGetFlag("GOTSPRITESTOOL", 0)
+THEN
+ObjectSetFlag(_character, "QuestUpdate_CollectSpriteStoolForVaccine_Completed");
+QuestClose((CHARACTERGUID)_character, "CollectSpriteStoolForVaccine");
+PartyAddExperience((CHARACTERGUID)_character, 1, 1, 300);
+GlobalSetFlag("GOTSPRITESTOOL");
+
+
+
+PROC
+PROC_SpriteStool((GUIDSTRING)_character)
+AND
+GlobalGetFlag("HASSPRITESTOOLPERMISSION", 0)
+AND
+GlobalGetFlag("GOTSPRITESTOOL", 0)
+AND
+DB_HerbDogsFight(_dogfight)
+THEN
+ObjectSetFlag(_character, "QuestUpdate_CollectSpriteStoolForVaccine_Completed");
+SetFaction(_dogfight, "Evil NPC");
+PartyAddExperience((CHARACTERGUID)_character, 1, 1, 100);
+CharacterMoveTo(TRHU_Blae_Drock_000_750f2fc9-5daf-4413-9c44-86286fcca6d7, _character, 1, "", 1); 
+DisplayText(TRHU_Blae_Drock_000_750f2fc9-5daf-4413-9c44-86286fcca6d7, "What are you doing with my dogs!?!?!?!?!!!!!");
+GlobalSetFlag("GOTSPRITESTOOL");
+
+IF
+ItemTemplateAddedToCharacter(TRHU_Sprite_Stool_12375756-2c14-43cc-962d-f85c9b811cd5, _item, _character)
+THEN
+PROC_SpriteStool(_character);
+
+IF
+GlobalFlagSet("HASSPRITESTOOLPERMISSION")
+AND
+DB_Herbs(_herb)
+AND
+DB_IsPlayer(_character)
+THEN
+ItemClearOwner((ITEMGUID)_herb);
+ShowMapMarker(_character, "SpriteStool", 1);
+
+
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelTwo"

@@ -1,0 +1,21 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterEnteredTrigger(_character, RickFiendEventTrigger_1793b6ae-2a95-463c-87d1-145a6e79ded7)
+AND
+DB_IsPlayer(_character)
+AND
+GlobalGetFlag("FIENDSTRIGGERED", 0)
+AND
+DB_RockFiends(_fiend)
+THEN
+CharacterAppearAt((CHARACTERGUID)_fiend, RockFiendSpawnPointTrigger_4bed3152-fece-42f4-b545-e3f5bbdbd0a5, 1, "");
+CharacterAppearAt(TRHU_RiverVulture_001_a25c81d1-219a-4d01-86bb-b7bce2c7134e, VultureSpawnPointTrigger_2233af72-e01d-496b-b521-5f0b4dc3ae85, 1, "");
+GlobalSetFlag("FIENDSTRIGGERED");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelTwo"

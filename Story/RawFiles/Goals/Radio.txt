@@ -1,0 +1,37 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+//testsave
+DB_Radios(Radio_ad90bf57-4942-4e21-bd61-cc624d925003, GUIDSTRING_2ec3321c-a3e2-4d6d-b31c-01c24b27cc2e);
+DB_Radios(TavernRadio_709c9198-893d-413a-9031-299f018d5592, GUIDSTRING_2ec3321c-a3e2-4d6d-b31c-01c24b27cc2e);
+DB_Radios(Radio_TRHU_000_f1d8f70c-ce05-859c-5d76-33c870c0354f, GUIDSTRING_2ec3321c-a3e2-4d6d-b31c-01c24b27cc2e);
+KBSECTION
+IF
+CharacterUsedItem(_character, _radio)
+AND
+DB_Radios(_radio, _song)
+AND
+GlobalGetFlag("RadioPlaying", 0)
+THEN
+PlaySoundResource(_radio, _song);
+DisplayText(_character, "Awesome! This is the new hit single by Saint John and the Revelations <br><br> www.sjatr.com!!!");
+GlobalSetFlag("RadioPlaying");
+TimerLaunch("RadioStopped", 4200);
+CharacterUseSkill(_character, "Shout_InspireStart", _character, 1, 1, 1);
+
+
+IF
+TimerFinished("RadioStopped")
+THEN
+GlobalClearFlag("RadioPlaying");
+
+/*
+IF
+CharacterUsedItem(_character, ITEMGUID_FUR_Humans_Rich_Piano_B_000_cd88b3b8-7580-4e62-ad0a-ebefec84d750)
+THEN
+CharacterTeleportPartiesToTrigger(TestKonamiTeleportTrigger_c3b35be8-7a7b-4116-8488-b039afcaf434, "");
+*/
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "__Start"

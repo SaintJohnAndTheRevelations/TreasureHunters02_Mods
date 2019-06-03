@@ -1,0 +1,53 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ItemOwnerShipTriggers("LevelTwo", ZonamaRegionTrigger_7b504a6d-ec36-4176-8536-fbdea7bf844b, TRHU_Trader_Supplies_000_0bbfb884-4aef-4e49-8054-dc872e069c8c); 
+KBSECTION
+IF
+CharacterEnteredTrigger(_character, StartLevelTwoEventTrigger_157d4ba9-2b64-4bec-be99-a1ffc196bb49)
+AND
+DB_IsPlayer(_character)
+AND
+GlobalGetFlag("STARTEDLEVELTWO", 0)
+THEN
+CharacterMoveToAndTalk(TRHU_Reest_Brilmene_000_276af5b5-53d0-4783-97e2-5442b1268f0a, _character, "ReestBrilmene", 1, "", 0, 20.0);
+SetOnStage(TRHU_RockFiends_003_cf4a0e0a-d230-4d00-bece-7c7c35d35d5c, 0);
+SetOnStage(TRHU_RockFiends_004_737ea47d-402c-497d-964a-a38d85f0c7c5, 0);
+SetOnStage(TRHU_RockFiends_005_8af6956f-a8e9-4c5d-85c9-c91021cb96f7, 0);
+SetOnStage(TRHU_RiverVulture_001_a25c81d1-219a-4d01-86bb-b7bce2c7134e, 0);
+SetOnStage(CHARACTERGUID_TRHU_River_Trapper_000_957dc19f-b31d-40c5-acda-b8324972450f, 0);
+SetOnStage(CHARACTERGUID_TRHU_River_Trapper_001_fc8da74e-8980-4cd8-b60f-72d906ee7b42, 0);
+SetOnStage(ITEMGUID_BoatToHuntingGrounds_864d314a-0da5-4f14-996d-fef76bb03eb5, 0);
+DisplayText(TRHU_Reest_Brilmene_000_276af5b5-53d0-4783-97e2-5442b1268f0a, "Those people are nuts...");
+GlobalSetFlag("STARTEDLEVELTWO");
+GlobalSetFlag("TELEPORTAFTERSTARTSECONDLEVEL");
+ItemTemplateRemoveFrom("ITEMGUID_TRHU_GoHome_Pipe_d978f1b6-a96f-4dbc-90c9-49fb8b46cba4", _character, 1);
+ItemTemplateAddTo("ITEMGUID_TRHU_GoHome_Pipe_Level_Three_f14d842e-f0e9-410c-a475-34e5f8f70049", _character, 1, 0);
+
+
+IF
+CharacterLeftTrigger(_character, StartLevelTwoEventTrigger_157d4ba9-2b64-4bec-be99-a1ffc196bb49)
+AND
+DB_IsPlayer(_character)
+AND
+DB_WellSpirits(_wellspirit)
+AND
+DB_IsPlayer(_character)
+THEN
+SetOnStage(_wellspirit, 0);
+ShowMapMarker(_character, "BlaeDrock", 1);
+
+
+IF
+GlobalFlagSet("TALKEDTOREESTBRILMENE")
+THEN
+CharacterMoveTo(TRHU_Reest_Brilmene_000_276af5b5-53d0-4783-97e2-5442b1268f0a, ReestWalkToPointTrigger_489ca029-4096-4df0-9399-cbebf4413310, 0, "", 0);
+
+IF
+CharacterEnteredTrigger(TRHU_Reest_Brilmene_000_276af5b5-53d0-4783-97e2-5442b1268f0a, ReestDisappearEventTrigger_ca152829-22cf-4e57-9407-2ff0c62b20e0)
+THEN
+SetOnStage(TRHU_Reest_Brilmene_000_276af5b5-53d0-4783-97e2-5442b1268f0a, 0);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelTwo"

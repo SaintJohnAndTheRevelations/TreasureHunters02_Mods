@@ -1,0 +1,172 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_RestTemplates("FUR_Humans_Camping_Sleepingbag_B_4d7216c9-c21e-4ab0-b98e-97d744798912","STORY_PartyRest",10.0,17.0);
+
+KBSECTION
+/*
+IF
+CharacterUsedItemTemplate(_Character,_Temp,_)
+AND
+DB_RestTemplates(_Temp,_Consume,_PartyRadius,_SafeRadius)
+THEN
+UserRest(_Character,_Consume,_PartyRadius,_SafeRadius);
+DisplayText(_Character, "ZZZZZZZZZZZZZZZZZ!!!!");
+CharacterSetHitpointsPercentage(_Character, 100.0);
+*/
+
+IF
+CharacterUsedItemTemplate(_character, _Temp, _)
+AND
+GlobalGetFlag("FIRSTSLEEP", 0)
+AND
+CharacterIsInCombat(_character, 0)
+AND
+DB_RestTemplates(_Temp,_Consume,_PartyRadius,_SafeRadius)
+THEN
+Proc_StartDialog(0, "FirstSleep", _character,  NULL_00000000-0000-0000-0000-000000000000);
+GlobalSetFlag("FIRSTSLEEP");
+
+IF
+CharacterUsedItemTemplate(_character, _Temp, _)
+AND
+DB_RestTemplates(_Temp,_Consume,_PartyRadius,_SafeRadius)
+AND
+GlobalGetFlag("FIRSTSLEEP", 1)
+AND
+CharacterIsInCombat(_character, 0)
+AND
+Random(100, _charRoll)
+THEN
+PROC_CheckChanceOfNightmareAttack((CHARACTERGUID)_character, (INTEGER)_charRoll, (STRING)_Consume, (REAL)_PartyRadius, (REAL)_SafeRadius);
+PlayAnimation(_character, "Sit_Sleep_02_Loop", "");
+
+
+PROC
+PROC_CheckChanceOfNightmareAttack((CHARACTERGUID)_character, (INTEGER)_charRoll, (STRING)_Consume, (REAL)_PartyRadius, (REAL)_SafeRadius)
+AND
+GlobalGetFlag("FIRSTSLEEP", 1)
+AND
+_charRoll >= 30 
+THEN
+UserRest(_Character,_Consume,_PartyRadius,_SafeRadius);
+DisplayText(_Character, "ZZZZZZZZZZZZZZZZZ!!!!");
+CharacterSetHitpointsPercentage(_Character, 100.0);
+
+PROC
+PROC_CheckChanceOfNightmareAttack((CHARACTERGUID)_character, (INTEGER)_charRoll, _Consume, _PartyRadius, _SafeRadius)
+AND
+GlobalGetFlag("FIRSTSLEEP", 1)
+AND
+_charRoll < 30 
+THEN
+PROC_SetHowManySleepAttackers(2, (CHARACTERGUID)_character);
+DisplayText(_Character, "ZZZZZZzz...what's that noise?!?!");
+
+
+PROC
+PROC_SetHowManySleepAttackers((INTEGER)_totalpossible, (CHARACTERGUID)_character)
+AND
+Random(_totalpossible, _howMany)
+AND
+IntegerSum(1, _howMany, _howManyAttackers)
+AND
+IntegertoString(_howManyAttackers, _displayHowManyAttackers)
+THEN
+SetVarInteger(_character, "HowManySleepAttackers", _howManyAttackers);
+PROC_SleepingRandomEncounter(_character);
+
+
+PROC
+PROC_SleepingRandomEncounter((CHARACTERGUID)_character)
+AND
+GetVarInteger(_character, "HowManySleepAttackers", 1)
+AND
+CharacterGetLevel(_character, _characterLevel)
+AND
+GetPosition(_character, _charx, _chary, _charz)
+AND
+FindValidPosition(_charx, _chary, _charz, 10.0, _character, _attackerx, _attackery, _attackerz)
+AND
+DB_SleepAttackers_One(_sleepAttacker)
+THEN
+CharacterResurrect((CHARACTERGUID)_sleepAttacker);
+CharacterLevelUpTo((CHARACTERGUID)_sleepAttacker, _characterLevel);
+CharacterAppearAtPosition((CHARACTERGUID)_sleepAttacker, _attackerx, _attackery, _attackerz, 1, "");
+
+
+PROC
+PROC_SleepingRandomEncounter((CHARACTERGUID)_character)
+AND
+GetVarInteger(_character, "HowManySleepAttackers", 2)
+AND
+CharacterGetLevel(_character, _characterLevel)
+AND
+GetPosition(_character, _charx, _chary, _charz)
+AND
+FindValidPosition(_charx, _chary, _charz, 10.0, _character, _attackerx, _attackery, _attackerz)
+AND
+DB_SleepAttackers_Two(_sleepAttacker)
+THEN
+CharacterResurrect((CHARACTERGUID)_sleepAttacker);
+CharacterLevelUpTo((CHARACTERGUID)_sleepAttacker, _characterLevel);
+CharacterAppearAtPosition((CHARACTERGUID)_sleepAttacker, _attackerx, _attackery, _attackerz, 1, "");
+
+PROC
+PROC_SleepingRandomEncounter((CHARACTERGUID)_character)
+AND
+GetVarInteger(_character, "HowManySleepAttackers", 3)
+AND
+CharacterGetLevel(_character, _characterLevel)
+AND
+GetPosition(_character, _charx, _chary, _charz)
+AND
+FindValidPosition(_charx, _chary, _charz, 10.0, _character, _attackerx, _attackery, _attackerz)
+AND
+DB_SleepAttackers_Three(_sleepAttacker)
+THEN
+CharacterResurrect((CHARACTERGUID)_sleepAttacker);
+CharacterLevelUpTo((CHARACTERGUID)_sleepAttacker, _characterLevel);
+CharacterAppearAtPosition((CHARACTERGUID)_sleepAttacker, _attackerx, _attackery, _attackerz, 1, "");
+
+PROC
+PROC_SleepingRandomEncounter((CHARACTERGUID)_character)
+AND
+GetVarInteger(_character, "HowManySleepAttackers", 0)
+AND
+CharacterGetLevel(_character, _characterLevel)
+AND
+GetPosition(_character, _charx, _chary, _charz)
+AND
+FindValidPosition(_charx, _chary, _charz, 10.0, _character, _attackerx, _attackery, _attackerz)
+AND
+DB_SleepAttackers_One(_sleepAttacker)
+THEN
+CharacterResurrect((CHARACTERGUID)_sleepAttacker);
+CharacterLevelUpTo((CHARACTERGUID)_sleepAttacker, _characterLevel);
+CharacterAppearAtPosition((CHARACTERGUID)_sleepAttacker, _attackerx, _attackery, _attackerz, 1, "");
+
+
+IF
+CharacterDied(_character)
+AND
+DB_SleepAttackers_One(_character)
+THEN
+SetOnStage(_character, 0);
+
+IF
+CharacterDied(_character)
+AND
+DB_SleepAttackers_Two(_character)
+THEN
+SetOnStage(_character, 0);
+
+IF
+CharacterDied(_character)
+AND
+DB_SleepAttackers_Three(_character)
+THEN
+SetOnStage(_character, 0);
+EXITSECTION
+
+ENDEXITSECTION

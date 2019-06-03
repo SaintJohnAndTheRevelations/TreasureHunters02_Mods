@@ -1,0 +1,110 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_WellSpirits(TRHU_Well_Spirit_000_5661374d-0cac-466b-9e45-aa3481d284ac);
+DB_WellSpirits(TRHU_Well_Spirit_001_088ec350-fbe4-4ccb-9db0-3b637847dd87);
+DB_WellSpirits(TRHU_Well_Spirit_002_8f653bda-8181-4f3e-b893-49ec40f8e76b);
+DB_WellSpirits(TRHU_Well_Spirit_003_72533c53-8b5d-48db-9b77-b9f758d474d5);
+DB_WellSpirits(TRHU_Well_Spirit_004_a3432636-21ba-4b1d-ba1b-e5cfda3341f3);
+DB_WellSpirits(TRHU_Well_Spirit_005_6b364a54-922a-4aaa-af0e-b820a697fae6);
+KBSECTION
+IF
+CharacterUsedItem(_character, Well_7b026ae1-93cd-4218-9375-7e1ba95df2c1)
+AND
+GlobalGetFlag("GOTMAPQUEST", 1)
+THEN
+TimerLaunch("WELLSPIRITSATTACK", 2000);
+
+IF
+TimerFinished("WELLSPIRITSATTACK")
+THEN
+CharacterAppearAt(TRHU_Well_Spirit_000_5661374d-0cac-466b-9e45-aa3481d284ac, WellSpiritSpawnPointOneTrigger_64a3047e-cb10-4465-8fd4-86b422a5775b, 1, "");
+
+IF
+CharacterReceivedDamage(TRHU_Well_Spirit_000_5661374d-0cac-466b-9e45-aa3481d284ac, _percentage, _)
+AND
+CharacterGetHitpointsPercentage(TRHU_Well_Spirit_000_5661374d-0cac-466b-9e45-aa3481d284ac, _remainingvitality)
+AND
+_remainingvitality < 50.0
+AND
+GlobalGetFlag("FIRSTWELLSPIRITHURT", 0)
+THEN
+DisplayText(TRHU_Well_Spirit_000_5661374d-0cac-466b-9e45-aa3481d284ac, "Ouch!!!! Help!!!!");
+GlobalSetFlag("FIRSTWELLSPIRITHURT");
+TimerLaunch("WellSpiritOneTimer", 2000);
+
+IF
+TimerFinished("WellSpiritOneTimer")
+THEN
+CharacterAppearAt(TRHU_Well_Spirit_001_088ec350-fbe4-4ccb-9db0-3b637847dd87, WellSpiritSpawnPointTwoTigger_ce095ba1-18ff-42ee-82b2-f591367569be, 1, "");
+CharacterAppearAt(TRHU_Well_Spirit_002_8f653bda-8181-4f3e-b893-49ec40f8e76b, WellSpiritSpawnPointThreeTrigger_a6bf5d33-3896-4490-aa4a-e06c390ec3ed, 1, "");
+
+IF
+CharacterReceivedDamage(TRHU_Well_Spirit_002_8f653bda-8181-4f3e-b893-49ec40f8e76b, _percentage, _)
+AND
+CharacterGetHitpointsPercentage(TRHU_Well_Spirit_002_8f653bda-8181-4f3e-b893-49ec40f8e76b, _remainingvitality)
+AND
+_remainingvitality < 30.0
+AND
+GlobalGetFlag("SECONDWELLSPIRITHURT", 0)
+THEN
+DisplayText(TRHU_Well_Spirit_002_8f653bda-8181-4f3e-b893-49ec40f8e76b, "Thieves! Stop these thieves! Help!!!!");
+GlobalSetFlag("SECONDWELLSPIRITHURT");
+TimerLaunch("WellSpiritTwoTimer", 2000);
+
+IF
+TimerFinished("WellSpiritTwoTimer")
+THEN
+CharacterAppearAt(TRHU_Well_Spirit_003_72533c53-8b5d-48db-9b77-b9f758d474d5, WellSpiritSpawnPointTwoTigger_ce095ba1-18ff-42ee-82b2-f591367569be, 1, "");
+CharacterAppearAt(TRHU_Well_Spirit_004_a3432636-21ba-4b1d-ba1b-e5cfda3341f3, WellSpiritSpawnPointThreeTrigger_a6bf5d33-3896-4490-aa4a-e06c390ec3ed, 1, "");
+CharacterAppearAt(TRHU_Well_Spirit_005_6b364a54-922a-4aaa-af0e-b820a697fae6, WellSpiritSpawnPointOneTrigger_64a3047e-cb10-4465-8fd4-86b422a5775b, 1, "");
+
+IF
+CharacterDied(_character)
+AND
+DB_WellSpirits(_character)
+AND
+GlobalGetFlag("CHECKWELLSPIRITS", 0)
+THEN
+NOT DB_WellSpirits(_character);
+GlobalSetFlag("CHECKWELLSPIRITS");
+
+IF
+GlobalFlagSet("CHECKWELLSPIRITS")
+AND
+NOT DB_WellSpirits(_)
+AND
+DB_IsPlayer(_character)
+THEN
+GlobalSetFlag("KILLEDWELLSPIRITS");
+ObjectSetFlag(_character, "QuestUpdate_CollectSpriteStoolForVaccine_BlaeMissionEnd", 1);
+
+IF
+GlobalFlagSet("CHECKWELLSPIRITS")
+AND
+DB_WellSpirits(_)
+THEN
+GlobalClearFlag("CHECKWELLSPIRITS");
+
+
+IF
+GlobalFlagSet("WELLSPIRITMARKER")
+AND
+DB_IsPlayer(_character)
+THEN
+ShowMapMarker((CHARACTERGUID)_character, "WellSpirits", 1);
+
+IF
+CharacterLeftTrigger(_character, WELLSPIRITEVENTTRIGGER_31314362-8913-40f1-ad90-5584d0aa7442)
+AND
+DB_WellSpirits(_wellspirit)
+AND
+CharacterIsDead((CHARACTERGUID)_wellspirit, 1)
+THEN
+GlobalSetFlag("KILLEDWELLSPIRITS");
+ObjectSetFlag(_character, "QuestUpdate_CollectSpriteStoolForVaccine_BlaeMissionEnd", 1);
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelTwo"

@@ -1,0 +1,18 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_GruzkeOffice(TRHU_Gruzke_Brec_000_a9eed105-69a6-4ec4-bac8-20d550cb7db4);
+DB_GruzkeOffice(TRHU_Gorthmail_Warrior_000_8d1e1660-d58d-49b5-a88b-28aeffc78a19);
+DB_GruzkeOffice(TRHU_Gorthmail_Warrior_001_c414ad62-67cf-4a4b-b2c5-c53c315db103);
+DB_GruzkeOffice(TRHU_Gorthmail_Mage_000_d9b94e1e-d2b3-4f24-9c5c-4427a7ad74c9);
+KBSECTION
+IF
+GlobalFlagSet("GRUZKEFIGHTSTART")
+AND
+DB_GruzkeOffice(_persontofight)
+THEN
+SetFaction(_persontofight, "Evil NPC");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelTwo"

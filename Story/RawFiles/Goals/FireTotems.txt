@@ -1,0 +1,66 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_FireTotems(TRHU_Fire_Totem_001_0a23f276-ef78-49fa-9a7b-7f6ceab72ea0);
+DB_FireTotems(TRHU_Fire_Totem_000_20db81ce-61d3-484f-82a2-7d3973013baa);
+DB_FireTotems(TRHU_Fire_Totem_002_b0231574-84d2-484f-9cca-2053c03013c4);
+DB_FireTotems(TRHU_Fire_Totem_003_d0972846-d508-411a-b331-49d1748f0011);
+DB_FireTotems(TRHU_Fire_Totem_009_8b522033-3889-438c-ac1e-2b9112352b95);
+DB_FireTotems(TRHU_Fire_Totem_008_04edc959-f992-4fea-9fb6-ca7075d12dbf);
+DB_FireTotems(TRHU_Fire_Totem_007_b92b9bce-bb85-42c3-88dd-33d71f0a539a);
+DB_FireTotems(TRHU_Fire_Totem_006_d97dc133-bbcd-40d0-9cf1-644bdb4cfceb);
+DB_FireTotems(TRHU_Fire_Totem_005_3abf5ce2-bafe-4f8b-8abc-49b0bcf88f78);
+DB_FireTotems(TRHU_Fire_Totem_004_8e8e4d3e-9565-4a98-8ce4-bc7e0c974ced);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_020_7f3004e5-5677-4c74-bd5f-3d970bf87c21);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_021_71270f42-c751-4489-9819-6fa77f304e35);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_022_dc8cc053-b9c8-4c1b-9e0f-40ff49e7d17c);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_023_56dafc1b-9165-4c90-a63d-d3f0e59fecd6);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_024_137d2dc6-b645-4f02-ba49-048b86f7d2b6);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_025_227ce0a4-423f-4b05-8c8f-6f2ea254d74c);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_026_1043c9cf-47ae-47c8-a7cd-92cf9db65d22);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_010_aa6b3351-6a33-4405-89c9-a088d09c4c72);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_011_d1e3352a-b7fb-48fc-bb0c-b9ea2737eae3);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_012_ef1661ba-ae0b-4ae4-bd64-23dd99af6847);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_013_6c07de1b-d4a8-4afc-b8bf-863df0018f6c);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_014_9d7fc4dd-9236-4f1f-96f8-6615ce890ee4);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_015_c43eafff-15a1-4792-9b45-f16d38dd43c8);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_016_1671578d-aaaa-4b06-bf2b-1c9cc9863b97);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_017_3897fda2-3a4a-4e03-9def-6060f883bf70);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_018_32a4ef0c-b972-4d21-ae61-ea16bc897503);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_019_d6e12c69-78d7-4144-a97f-86fc966c6394);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_031_302129d4-cd8d-42c8-80cc-e0d3a987f953);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_030_917f700e-b03c-4e4e-8d32-5be051fecced);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_029_bfff4ddf-7d1b-4fc6-a604-08246a7ff21c);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_028_58272be4-ec27-434a-98b3-a573850baf94);
+DB_FireTotems(CHARACTERGUID_TRHU_Fire_Totem_027_b32f1f89-d033-4bbc-90aa-5e6f741829f2);
+KBSECTION
+IF
+CharacterEnteredTrigger(_character, FireTotemEventTrigger_9acef3a5-c755-4314-8258-0f696f20ff3e)
+AND
+GlobalGetFlag("TotemsTurnedOff", 0)
+THEN
+TimerLaunch("TotemNovaTimer", 20);
+
+IF
+CharacterLeftTrigger(_character, FireTotemEventTrigger_9acef3a5-c755-4314-8258-0f696f20ff3e)
+THEN
+TimerCancel("TotemNovaTimer");
+
+IF
+TimerFinished("TotemNovaTimer")
+AND DB_FireTotems(_totem)
+THEN
+CharacterUseSkill((CHARACTERGUID)_totem, "Shout_EnemySupernova", (CHARACTERGUID)_totem, 1, 1, 1);
+TimerLaunch("TotemNovaTimer", 2250);
+
+IF
+CharacterUsedItem(_character, LavaPump_9f1f55e7-4072-42a7-a12b-edf6596eccc9)
+THEN
+TimerCancel("TotemNovaTimer");
+PartyAddExperience(_character, 1, 1, 100);
+GlobalSetFlag("TotemsTurnedOff");
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelOne"

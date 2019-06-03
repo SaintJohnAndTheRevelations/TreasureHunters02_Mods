@@ -1,0 +1,96 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_PITG(TRHU_PainInTheGrass_001_46155c8b-cfb1-451f-9717-cb01cb0e6bf7, PITGOnePointTrigger_d44262e5-87d6-48ba-b88b-ac5a44e7399b);
+DB_PITG(TRHU_PainInTheGrass_002_93777911-a1a4-4be1-a34a-576af8374414, PITGTwoPointTrigger_7517704a-75b1-4b81-aaff-e8e19ed8d989);
+DB_PITG(TRHU_PainInTheGrass_003_26b53f78-fef2-4dff-baee-59c0a527489e, PITGThreePointTrigger_fdce6df9-8bd5-4f0b-a96f-ff111da632bb);
+DB_PITG(TRHU_PainInTheGrass_000_a240a96a-c84d-499d-ad50-03cc39dce6ce, PITGFourPointTrigger_7e48eba3-5ae8-4aeb-a6ff-015ea6e4996d);
+DB_WEIGHTED();
+KBSECTION
+//Getting to Hunting Grounds
+
+IF
+GlobalFlagSet("GOTMAPQUEST")
+AND
+DB_IsPlayer(_character)
+THEN
+ShowMapMarker(_character, "Neklelyan", 1);
+
+IF
+CharacterUsedItem(_character, ITEMGUID_BoatToHuntingGrounds_864d314a-0da5-4f14-996d-fef76bb03eb5)
+AND
+CharacterIsInCombat(_character, 0)
+AND
+DB_PITG(_pitg, _startpoint)
+THEN
+CharacterTeleportPartiesToTrigger(DragonHuntingGroundsTeleportTrigger_525723e3-aa1d-4935-bb31-2eddc8e869ab, "");
+
+IF
+GlobalFlagSet("BOATMARKER")
+AND
+DB_IsPlayer(_character)
+THEN
+ShowMapMarker((CHARACTERGUID)_character, "ToHuntingGrounds", 1);
+ObjectSetFlag(_character, "QuestUpdate_AddVaccineToFood_FoundMap");
+SetOnStage(ITEMGUID_BoatToHuntingGrounds_864d314a-0da5-4f14-996d-fef76bb03eb5, 1);
+SetOnStage(CHARACTERGUID_TRHU_River_Trapper_000_957dc19f-b31d-40c5-acda-b8324972450f, 1);
+SetOnStage(CHARACTERGUID_TRHU_River_Trapper_001_fc8da74e-8980-4cd8-b60f-72d906ee7b42, 1);
+
+IF
+CharacterEnteredTrigger(_character, LandedAtHuntingGroundsEventTrigger_d0358aa7-cfe3-4161-b806-8e1ae70483c3)
+AND
+GlobalGetFlag("LANDEDATHUNTINGGROUNDS", 0)
+THEN
+Proc_StartDialog(0, "LandedAtHuntingGrounds", _character,  NULL_00000000-0000-0000-0000-000000000000);
+GlobalSetFlag("LANDEDATHUNTINGGROUNDS");
+
+
+
+IF
+CharacterEnteredTrigger(_character, SheepEntrailEventTrigger_0b6c285a-c6f9-4149-906f-86bf581bc2f6)
+AND
+GlobalGetFlag("GOTVACCINEINSTRUCTIONS", 0)
+THEN
+Proc_StartDialog(0, "ApplyVaccineToFood", _character,  NULL_00000000-0000-0000-0000-000000000000);
+GlobalSetFlag("GOTVACCINEINSTRUCTIONS");
+
+IF
+GlobalFlagSet("VACCINATEDFOOD")
+AND
+DB_IsPlayer(_character)
+THEN
+PartyAddExperience(_character, 1, 1, 400);
+TimerLaunch("PITGTIMER", 4000);
+ObjectSetFlag(_character, "QuestUpdate_AddVaccineToFood_VaccineCombined");
+
+
+IF
+ItemTemplateAddedToCharacter(TRHU_Vaccinated_Entrails_9dc0dbe7-8510-4e8b-8694-1a3b3f4dda35, _item, _character)
+AND
+GlobalGetFlag("VACCINATEDFOOD", 0)
+THEN
+GlobalSetFlag("VACCINATEDFOOD");
+DisplayText((GUIDSTRING)_character, "Ugh, that stinks!!!!!! I hope it works. I can use the small Time Travel Pipe to get back to Wik in my time.");
+ItemDrop(_item);
+DB_WEIGHTED(_item);
+TimerLaunch("WEIGHTEDENTRAILS", 2000);
+CloseUI((CHARACTERGUID)_character, "Inventory");
+
+IF
+TimerFinished("WEIGHTEDENTRAILS")
+AND
+DB_WEIGHTED(_item)
+THEN
+ItemSetCanPickUp(_item, 0);
+
+IF
+TimerFinished("PITGTIMER")
+AND
+DB_PITG(_pitg, _startpoint)
+THEN
+CharacterAppearAt((CHARACTERGUID)_pitg, (GUIDSTRING)_startpoint, 1, "");
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelTwo"

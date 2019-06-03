@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<save>
+    <header version="2" />
+    <version major="3" minor="6" revision="3" build="1" />
+    <region id="Markers">
+        <node id="root">
+            <children>
+                <node id="Marker">
+                    <attribute id="DisplayText" value="Tenretni Hunting Grounds" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="MarkerBroadcast" value="Party" type="22" />
+                    <attribute id="MarkerID" value="ToHuntingGrounds" type="22" />
+                    <attribute id="MarkerIcon" value="QuestMarker" type="22" />
+                    <attribute id="MarkerLevel" value="LevelTwo" type="22" />
+                    <attribute id="MarkerTargetObjectType" value="Item" type="22" />
+                    <attribute id="MarkerTargetObjectUUID" value="864d314a-0da5-4f14-996d-fef76bb03eb5" type="22" />
+                </node>
+                <node id="Marker">
+                    <attribute id="DisplayText" value="Sprite Stool Garden" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="MarkerBroadcast" value="Party" type="22" />
+                    <attribute id="MarkerID" value="SpriteStool" type="22" />
+                    <attribute id="MarkerIcon" value="QuestMarker" type="22" />
+                    <attribute id="MarkerLevel" value="LevelTwo" type="22" />
+                    <attribute id="MarkerTargetObjectType" value="Item" type="22" />
+                    <attribute id="MarkerTargetObjectUUID" value="bd6a91b5-6944-4c99-ace4-e61e6bff5918" type="22" />
+                </node>
+                <node id="Marker">
+                    <attribute id="DisplayText" value="Well Spirits" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="MarkerBroadcast" value="Party" type="22" />
+                    <attribute id="MarkerID" value="WellSpirits" type="22" />
+                    <attribute id="MarkerIcon" value="QuestMarker" type="22" />
+                    <attribute id="MarkerLevel" value="LevelTwo" type="22" />
+                    <attribute id="MarkerTargetObjectType" value="Item" type="22" />
+                    <attribute id="MarkerTargetObjectUUID" value="7b026ae1-93cd-4218-9375-7e1ba95df2c1" type="22" />
+                </node>
+                <node id="Marker">
+                    <attribute id="DisplayText" value="Tavern Bartender" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="MarkerBroadcast" value="Party" type="22" />
+                    <attribute id="MarkerID" value="BlaeDrock" type="22" />
+                    <attribute id="MarkerIcon" value="QuestMarker" type="22" />
+                    <attribute id="MarkerLevel" value="LevelTwo" type="22" />
+                    <attribute id="MarkerTargetObjectType" value="Character" type="22" />
+                    <attribute id="MarkerTargetObjectUUID" value="750f2fc9-5daf-4413-9c44-86286fcca6d7" type="22" />
+                </node>
+                <node id="Marker">
+                    <attribute id="DisplayText" value="Neklelyan" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="MarkerBroadcast" value="Party" type="22" />
+                    <attribute id="MarkerID" value="Neklelyan" type="22" />
+                    <attribute id="MarkerIcon" value="QuestMarker" type="22" />
+                    <attribute id="MarkerLevel" value="LevelTwo" type="22" />
+                    <attribute id="MarkerTargetObjectType" value="Character" type="22" />
+                    <attribute id="MarkerTargetObjectUUID" value="79327f1e-9289-48a5-b5ed-42e370d36518" type="22" />
+                </node>
+                <node id="Marker">
+                    <attribute id="DisplayText" value="" handle="ls::TranslatedStringRepository::s_HandleUnknown" type="28" />
+                    <attribute id="MarkerBroadcast" value="Party" type="22" />
+                    <attribute id="MarkerID" value="TenretniEgg" type="22" />
+                    <attribute id="MarkerIcon" value="QuestMarker" type="22" />
+                    <attribute id="MarkerLevel" value="LevelOne" type="22" />
+                    <attribute id="MarkerTargetObjectType" value="Item" type="22" />
+                    <attribute id="MarkerTargetObjectUUID" value="4badd929-a274-47b7-9cd8-df42a2239ec9" type="22" />
+                </node>
+            </children>
+        </node>
+    </region>
+</save>

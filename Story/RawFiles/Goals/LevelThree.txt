@@ -1,0 +1,20 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_CheckLevelStart("LevelThree");
+DB_Dialogs(TRHU_Wik_Level_Three_84d9e81d-aba7-854c-3a43-d7e96b47900f, "WikSecondMissionClose");
+KBSECTION
+IF
+RegionStarted("LevelThree")
+THEN
+GoalCompleted;
+
+IF DB_CheckLevelStart("LevelThree")
+AND
+DB_CurrentLevel("LevelThree")
+THEN
+GoalCompleted;
+EXITSECTION
+NOT DB_CheckLevelStart("LevelThree");
+ENDEXITSECTION
+ParentTargetEdge "__Start"

@@ -1,0 +1,78 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_StageFighters(TRHU_LIZ_Female_dreamer_000_c865ce4a-2c2e-4492-b493-dfc5d4bb4e5d);
+
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Female_003_8c2f2e78-c347-4c49-a004-1b43c4a4caab);
+DB_MouthBreathers(CHARACTERGUID_Humans_Male_Clothing_000_acd9c964-b865-4acd-bb16-aaab8f1622d9);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_male_001_462e067f-3875-400d-89c8-b2533303d991);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ__Male_Armor_000_ed3a76b0-0f6b-47b2-a951-6bb9028673a9);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Female_002_233cec3f-6f2f-4960-b85a-98764e5ab893);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_male_000_fc4dc6c1-e90d-4ccf-a3c0-c09d2be90fc0);
+DB_MouthBreathers(CHARACTERGUID_DW_Dwarf_Commoner_F_000_470e2da5-a753-4ef7-8863-6dedddb35e44);
+DB_MouthBreathers(CHARACTERGUID_Humans_Female_Clothing_001_acea5be5-bcef-4da8-902f-5f4ab5df0a11);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Male_000_459a3f8d-4b66-48c3-8b82-c3c24ac67108);
+DB_MouthBreathers(CHARACTERGUID_Dwarves_Female_Clothing_000_344818ac-36bc-42a0-86ec-e5647454e98e);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ__Male_000_edb6583f-8244-4c95-9238-230c5a796157);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ__Female_Meistr_000_0d289181-ed29-4be3-99d0-abdb958f2c3f);
+DB_MouthBreathers(CHARACTERGUID_Humans_Female_Clothing_Poor_000_5f158c06-172b-49ae-9d7c-f9910a376533);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Male_001_b090947a-fe5c-4548-a45e-4797c00c5099);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Male_002_b356861c-65af-4173-abea-3ec310291f75);
+DB_MouthBreathers(CHARACTERGUID_Humans_Female_Clothing_000_fe9388ec-cde5-4b53-81ca-5fbbe2494457);
+DB_MouthBreathers(CHARACTERGUID_DW_Dwarf_Commoner_M_000_e7a60ffd-2c59-45a3-ab17-23c6adbd0fdb);
+DB_MouthBreathers(CHARACTERGUID_Humans_Male_Clothing_Rich_000_b8efa90c-2463-4c82-bb4c-033b83cbce25);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Female_001_8d2653ee-8a88-4deb-8125-9687e8047f19);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ__Male_001_10064452-5f85-40a7-b19f-1c56626ac1a7);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Female_000_5a8cb006-b881-46ea-ab63-e4bc0641fd8c);
+DB_MouthBreathers(CHARACTERGUID_TRHU_LIZ_Male_003_b64325f1-063e-4ce9-a920-874b90e7f8d7);
+
+DB_VillageChildren(Humans_Children_000_67724cb0-45f9-4853-8ad7-e71c9e6fac59);
+DB_VillageChildren(CHARACTERGUID_TRHU_LIZ__Male_002_64112197-d3c7-4207-b104-e12bf34d0256);
+DB_VillageChildren(CHARACTERGUID_TRHU_LIZ_Female_004_2291afdf-8b50-422d-8ba3-5eec071d9c0e);
+KBSECTION
+IF
+CharacterEnteredTrigger(_character, StageEventTrigger_3442f01c-89ed-4995-b736-9b876ce327e0)
+THEN
+TimerLaunch("MISINFOTALKONE", 3000);
+
+IF
+TimerFinished("MISINFOTALKONE")
+AND
+GlobalGetFlag("CRICCINBATTLE", 0)
+THEN
+CharacterMoveToAndTalk(TRHU_LIZ_Female_dreamer_000_c865ce4a-2c2e-4492-b493-dfc5d4bb4e5d, TRHU_LIZ_Female_dreamer_000_c865ce4a-2c2e-4492-b493-dfc5d4bb4e5d, "CriccMausa", 1, "", 0, 20.0);
+CharacterMoveToAndTalk(TRHU_LIZ_Female_003_8c2f2e78-c347-4c49-a004-1b43c4a4caab, TRHU_LIZ_Female_003_8c2f2e78-c347-4c49-a004-1b43c4a4caab, "MouthBreather", 1, "", 0, 20.0);
+TimerLaunch("MISINFOTALKONE", 3000);
+
+
+IF
+GlobalFlagSet("NEKLELYANFIGHTSTART")
+THEN
+GlobalSetFlag("CRICCINBATTLE");
+SetFaction(TRHU_LIZ_Female_dreamer_000_c865ce4a-2c2e-4492-b493-dfc5d4bb4e5d, "Evil NPC");
+CharacterMoveTo((CHARACTERGUID)TRHU_LIZ_Female_dreamer_000_c865ce4a-2c2e-4492-b493-dfc5d4bb4e5d, TRHU_Neklelyan_000_79327f1e-9289-48a5-b5ed-42e370d36518, 1, "", 1); 
+SetFaction(TRHU_Neklelyan_000_79327f1e-9289-48a5-b5ed-42e370d36518, "Evil NPC");
+
+IF
+GlobalFlagSet("STARTCRICCFIGHT")
+AND
+DB_StageFighters(_stageFighter)
+AND
+DB_MouthBreathers(_mouthBreather)
+AND
+DB_VillageChildren(_child)
+THEN
+SetFaction(_stageFighter, "Evil NPC");
+SetFaction(_mouthBreather, "Evil NPC");
+CharacterMoveTo((CHARACTERGUID)_child, ChildrenRallyPointTrigger_02469098-4f86-4f28-aa61-d4028b8cd7dc, 1, "", 1);
+
+IF
+CharacterEnteredTrigger(_character, OnStageEventTrigger_23b86334-d840-4728-8aea-c8e20e6537bc)
+THEN
+CharacterMoveToAndTalk(TRHU_LIZ_Female_dreamer_000_c865ce4a-2c2e-4492-b493-dfc5d4bb4e5d, _character, "CriccMausaStageConvo", 1, "", 1, 20.0);
+
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelTwo"

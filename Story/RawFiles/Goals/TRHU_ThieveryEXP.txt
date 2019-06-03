@@ -1,0 +1,40 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_ChestsToPick(ITEMGUID_CONT_ArenaChest_Red_000_f4c8b575-9565-4597-bede-e51cd90ea8e9);
+DB_ChestsToPick(ITEMGUID_CONT_ArenaChest_Teal_001_54f3199d-ffd3-493d-9f58-14aff6d6d844);
+DB_ChestsToPick(ITEMGUID_CONT_Humans_Citz_Chest_A_002_a6f05ed9-56f5-4bd7-89c4-fdf290977982);
+DB_ChestsToPick(ITEMGUID_CONT_ArenaChest_Teal_000_d4510d99-bceb-442b-9d5a-f829f73f5a83);
+KBSECTION
+//Lockpicking - Only one key template Hum_Key_A is marked as a key, more should be added, or a better solution
+
+IF
+CanLockpickItem(_character, _item, _request)
+THEN
+ObjectSetFlag(_item, "LOCKPICKITEM");
+
+IF
+ItemTemplateAddedToCharacter(Hum_Key_A_492c91c4-68cc-482e-9985-0fc298f9ed81, _item, _character)
+THEN
+ObjectSetFlag(_item, "ISKEY");
+//DisplayText(_character, "That is indeed a key!");
+
+IF
+ItemUnlocked(_chest, _character, _key)
+AND
+DB_ChestsToPick(_chest)
+AND
+ObjectGetFlag(_key, "ISKEY", 0)
+AND
+CharacterGetAbility(_character, "Thievery", _thieverynum)
+AND
+CharacterGetLevel(_character, _charlevel)
+AND
+IntegerSum(2, _charlevel, _actpart)
+THEN
+PartyAddExperience(_character, 1, _actpart, 1);
+DisplayText(_character, "No lock can keep me out!!!");
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "__Start"

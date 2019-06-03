@@ -1,0 +1,5 @@
+DB_Origins 0CharacterReceivedDamage 2DB_BloodSnappers 1DB_KonamiAttempt 3
+DB_KonamiSequence 10
+DB_TestSequence 3
+DB_KonamiAttempt 0
+DB_KonamiAttempt 1DB_WEIGHTED 0DB_SUCCESSONSTAGEITEMS 1DB_SleepAttackers 1

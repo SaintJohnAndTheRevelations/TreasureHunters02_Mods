@@ -1,0 +1,119 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_RockWorms(TRHU_Fire_Worm_000_8c572ff3-f10e-446e-85a2-09a96e0120fa, WormSpawnPointTrigger01_10d5b9da-4498-4625-a8ca-5a5fa0b532a5);
+DB_RockWorms(TRHU_Rock_Worm_000_bc3006fd-70db-4fb0-923b-7589bcdb8bf4, WormSpawnPointTrigger02_e045bd13-6069-4f98-8bd6-736b191f7223);
+DB_RockWorms(TRHU_Rock_Worm_001_2e2f9c8d-5912-4228-8aac-0dba96bfafc2, WormSpawnPointTrigger03_596e5bd9-7d02-4bb7-b505-8cc2c45c86d6);
+DB_RockWorms(TRHU_Rock_Worm_002_98c63f80-254c-4dfb-b67a-5b21311eee80, WormSpawnPointTrigger04_1f5f9d9f-9fff-444e-97af-68278321ebc9);
+DB_RockWorms(TRHU_Rock_Worm_003_2c189c47-6d15-4620-ac39-902679c3d018, WormSpawnPointTrigger05_749e1ac2-8ea0-4b6d-b0f9-5a0faaae745c);
+
+DB_BloodSnappers(TRHU_Blood_Snapper_001_00976810-0bb6-4926-94a7-d5d5a8646448);
+DB_BloodSnappers(TRHU_Blood_Snapper_002_9d505c00-dfc2-4f4e-b052-275466ba7f4e);
+
+DB_Remainders(TRHU_Remainer_000_2065287a-fc4b-4670-9eb2-64a216bbcd3b);
+DB_Remainders(TRHU_Remainer_002_04d436f1-9b17-4ac9-ade3-fc09b45efa9a);
+DB_Remainders(TRHU_Remainer_003_6c5e0a1b-d0b6-4d16-bc00-e2396bf10907);
+DB_Remainders(TRHU_Remainer_004_e76b818c-11b4-4144-bd93-63cb889ac133);
+DB_Remainders(TRHU_Remainer_005_a36f631a-012b-40d6-a0cc-3104058247d4);
+DB_Remainders(TRHU_Remainer_006_0442dda5-db8f-4144-b06e-9ca27c131712);
+DB_Remainders(TRHU_Remainer_007_2508bda0-5609-42cc-9f9c-8773522fb270);
+KBSECTION
+IF
+CharacterLeftTrigger(_character, StartGameEventTrigger_1ab517d1-82da-41a3-b99b-1d9a02642101)
+AND
+GlobalGetFlag("MONSTERSPLACED", 0)
+AND
+DB_RockWorms(_worm, _spawnpoint)
+AND
+DB_Remainders(_remainder)
+THEN
+SetOnStage(_worm, 0);
+SetOnStage(_remainder, 0);
+SetOnStage(Creatures_Dragons_Young_A_000_889d67e4-2143-4359-8b64-6841e42d6312, 0);
+//SetOnStage(TRHU_Dragon_Nanny_002_aff76409-b2dc-41a7-bfe0-647da4b8309c, 0);
+SetOnStage(TRHU_Blood_Snapper_001_2eedd332-2103-4fa1-a1ca-c08de2ee2868, 0);
+SetOnStage(TRHU_Blood_Snapper_000_00976810-0bb6-4926-94a7-d5d5a8646448, 0);
+GlobalSetFlag("MONSTERSPLACED");
+
+IF
+CharacterEnteredTrigger(_character, WormEventTrigger_64f044c4-d6eb-4554-a259-30e785cbb501)
+AND
+GlobalGetFlag("WORMTRIGGERED", 0)
+AND
+DB_RockWorms(_worm, _spawnpoint)
+THEN
+CharacterAppearAt((CHARACTERGUID)_worm, _spawnpoint, 1, ""); 
+GlobalSetFlag("WORMTRIGGERED");
+
+
+
+IF
+CharacterReceivedDamage(TRHU_Blood_Snapper_002_9d505c00-dfc2-4f4e-b052-275466ba7f4e, _percentage, _)
+AND
+CharacterGetHitpointsPercentage(TRHU_Blood_Snapper_002_9d505c00-dfc2-4f4e-b052-275466ba7f4e, _remainingvitality)
+AND
+_remainingvitality < 50.0
+AND
+GlobalGetFlag("FIRSTSNAPPERHURT", 0)
+THEN
+GlobalSetFlag("FIRSTSNAPPERHURT");
+TimerLaunch("FirstSnapperTimer", 2000);
+TimerLaunch("SecondSnapperTimer", 8000);
+GlobalSetFlag("TRIGGEREDSNAPPERS");
+
+
+
+IF
+TimerFinished("FirstSnapperTimer")
+THEN
+PlayEffect(GUIDSTRING_2eedd332-2103-4fa1-a1ca-c08de2ee2868, "RS3_FX_Char_Creatures_VoidWoken_Drillworm_A_Spawn_Root_01");
+CharacterAppearAt(TRHU_Blood_Snapper_001_2eedd332-2103-4fa1-a1ca-c08de2ee2868, BloodSnapperSpawnPointTrigger_63da8566-9588-4cd4-9aad-dfc7bfcf88a0, 1, "");
+
+
+IF
+TimerFinished("SecondSnapperTimer")
+THEN
+PlayEffect(GUIDSTRING_00976810-0bb6-4926-94a7-d5d5a8646448, "RS3_FX_Char_Creatures_VoidWoken_Drillworm_A_Spawn_Root_01"); 
+CharacterAppearAt(TRHU_Blood_Snapper_000_00976810-0bb6-4926-94a7-d5d5a8646448, BigSnapperSpawnPointTrigger_7eb93059-1d81-4cd1-9491-4111e35220c7, 1, "");
+
+
+IF
+CharacterEnteredTrigger(_character, DragonNannyEventTrigger_46bcde88-1991-4a7f-8caf-f1ad49627aae)
+THEN
+CharacterMoveToAndTalk(TRHU_Dragon_Nanny_002_aff76409-b2dc-41a7-bfe0-647da4b8309c, (GUIDSTRING)_character, "dragonnanny", 1, "", 1, 20.0);
+
+
+IF
+GlobalFlagSet("NANNYTHREATENED")
+THEN
+SetFaction(TRHU_Dragon_Nanny_002_aff76409-b2dc-41a7-bfe0-647da4b8309c, "Evil NPC");
+
+
+
+
+IF
+CharacterEnteredTrigger(_character, RemainerAppearEventTrigger_1034f86c-94f0-4227-b2a5-4db1a71e5170)
+AND
+GlobalGetFlag("RemaindersTriggered", 0)
+AND
+DB_Remainders(_remainder)
+THEN
+SetOnStage(_remainder, 1);
+SetOnStage(Creatures_Dragons_Young_A_000_889d67e4-2143-4359-8b64-6841e42d6312, 1);
+//CharacterMoveTo(TRHU_Dragon_Nanny_002_aff76409-b2dc-41a7-bfe0-647da4b8309c, DragonNannyStandPointTrigger_d8637d8d-0acd-41e5-b4d8-f3030547a0bd, 0,"", 0);
+GlobalSetFlag("RemaindersTriggered");
+
+IF
+CharacterEnteredTrigger(_character, TeleporterTreeEventTrigger_1806dfec-d19f-46fe-9e57-8cdb0bf756a6)
+AND
+CharacterIsDead(TRHU_Burning_Sentinel_000_5e6bedea-df26-454c-8aa7-a8ccb85dd509, 0)
+THEN
+TeleportTo(_character, TeleporterTreeTeleportTrigger01_9f14df7c-0cf7-4f7c-ad1b-bc9a06b00492, "", 1, 0, 1);
+//RemoveStatus(TRHU_Burning_Sentinel_000_5e6bedea-df26-454c-8aa7-a8ccb85dd509, "SPIRIT");
+ApplyStatus(_character, "SPIRIT_VISION", 20.0, 1, NULL_00000000-0000-0000-0000-000000000000);
+//ApplyStatus(TRHU_Burning_Sentinel_000_5e6bedea-df26-454c-8aa7-a8ccb85dd509, "BURNING", 20.0, 1, NULL_00000000-0000-0000-0000-000000000000);
+CharacterUseSkill(TRHU_Burning_Sentinel_000_5e6bedea-df26-454c-8aa7-a8ccb85dd509, "Target_Fireblood", TRHU_Burning_Sentinel_000_5e6bedea-df26-454c-8aa7-a8ccb85dd509, 0, 1, 1);
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "LevelOne"

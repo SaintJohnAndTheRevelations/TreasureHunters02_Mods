@@ -1,0 +1,147 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+
+KBSECTION
+IF
+CharacterUsedItem(_character, FUR_Lizards_Drudanae_Pipe_Big_A_000_fe087337-5c32-4315-af7e-93ff50402b9b)
+AND
+GlobalGetFlag("STARTEDEGGMISSION", 0)
+AND
+GlobalGetFlag("WIKGAVESECONDMISSION", 0)
+THEN
+TimerLaunch("ToTheBeachTimer", 4100);
+AutoSave();
+DisplayText(_character, "I feel really weird...");
+PlayEffect(_character, "RS3_FX_GP_Status_Item_HolyFire_01");
+PlayEffect(_character, "RS3_FX_Skills_Divine_BlindingRadiance_Cast_Root_01");
+GlobalSetFlag("STARTEDEGGMISSION");
+GlobalSetFlag("RETURNTOWIKAFTERBEACH");
+PlayEffect(_character, "RS3_FX_Skills_Air_Lightning_Cast_Hand_Horizontal_01");
+TriggerSetAtmosphere(WikAtmosphereTrigger_98571e5e-81c2-45e1-8a41-6a099a927263, "28ae9a54-cedc-478b-9a68-1dc14ee47b12");
+CharacterUseItem(TRHU_Wik_000_3091a068-26e4-4ed1-9a3e-60833819bbc3, FUR_Rich_Sofa_Pouf_A_000_b0fb3cdd-c626-46b7-89ce-22242156c47f, "WikSat");
+
+IF
+TimerFinished("ToTheBeachTimer")
+AND
+DB_IsPlayer(_character)
+THEN
+CharacterTeleportPartiesToTrigger(TRIGGERGUID_ShoreTeleportTrigger_32839158-7be4-49e4-8d64-d7d2310243bb, "WentToBeach");
+PlayEffect(_character, "RS3_FX_Skills_Air_FreeFall_Reappear_01");
+
+
+PROC
+PROC_TeleportPipe((GUIDSTRING)_character, (STRING)_timer, (STRING)_displayText, (TRIGGERGUID)_atmosphereToTrigger, (STRING)_toAtmos, (TRIGGERGUID)_atmosphereFromTrigger, (STRING)_fromAtmos)
+THEN
+TimerLaunch(_timer, 4100);
+DisplayText(_character, _displayText);
+PlayEffect(_character, "RS3_FX_Skills_Divine_BlindingRadiance_Cast_Root_01");
+PlayEffect(_character, "RS3_FX_GP_Status_Item_HolyFire_01");
+PlayEffect(_character, "RS3_FX_Skills_Air_Lightning_Cast_Hand_Horizontal_01");
+TriggerSetAtmosphere(_atmosphereToTrigger, _toAtmos);
+TriggerSetAtmosphere(_atmosphereFromTrigger, _fromAtmos);
+CloseUI((CHARACTERGUID)_character, "Inventory");
+
+IF
+CharacterUsedItemTemplate(_character, "TRHU_GoHome_Pipe_d978f1b6-a96f-4dbc-90c9-49fb8b46cba4", _item)
+AND
+GlobalGetFlag("RETURNTOWIKAFTERBEACH", 1)
+THEN
+PROC_TeleportPipe(_character, "ToWikTimer", "It actually kind of feels pretty good...", WikAtmosphereTrigger_98571e5e-81c2-45e1-8a41-6a099a927263, "09553202-696a-4519-a39b-b2b268e4d573", DragonCaveAtmosphereTrigger_cb572b4e-0560-4854-90b9-6ed533335ab4, "28ae9a54-cedc-478b-9a68-1dc14ee47b12");
+TimerLaunch("WikTalkTimer", 6000);
+GlobalClearFlag("RETURNTOWIKAFTERBEACH");
+
+IF
+TimerFinished("ToWikTimer")
+AND
+DB_IsPlayer(_character)
+THEN
+CharacterTeleportPartiesToTrigger(ReturnToWIkTeleportTrigger_1891e894-2913-4afb-aa4c-ab3222ffbd1a, "BackToWik");
+PlayEffect(_character, "RS3_FX_Skills_Air_FreeFall_Reappear_01");
+
+IF
+TimerFinished("WikTalkTimer")
+AND
+DB_IsPlayer(_character)
+AND
+GlobalGetFlag("WIKGAVESECONDMISSION", 0)
+THEN
+CharacterMoveToAndTalk(TRHU_Wik_000_3091a068-26e4-4ed1-9a3e-60833819bbc3, _character, "WikSecondMission", 1,"", 0, 20.0);
+QuestClose(_character, "FindDragonEgg");
+
+
+//Second mission
+IF
+CharacterUsedItem(_character, FUR_Lizards_Drudanae_Pipe_Big_A_000_fe087337-5c32-4315-af7e-93ff50402b9b)
+AND
+GlobalGetFlag("STARTEDEGGMISSION", 1)
+AND
+GlobalGetFlag("WIKGAVESECONDMISSION", 1)
+THEN
+TimerLaunch("ToSecondLevelTimer", 5000);
+DisplayText(_character, "This is good stuff...");
+PlayEffect(_character, "RS3_FX_Skills_Divine_BlindingRadiance_Cast_Root_01");
+PlayEffect(_character, "RS3_FX_GP_Status_Item_HolyFire_01");
+PlayEffect(_character, "RS3_FX_Skills_Air_Lightning_Cast_Hand_Horizontal_01");
+TriggerSetAtmosphere(WikAtmosphereTrigger_98571e5e-81c2-45e1-8a41-6a099a927263, "28ae9a54-cedc-478b-9a68-1dc14ee47b12");
+GlobalSetFlag("TELEPORTAFTERSTARTSECONDLEVEL");
+
+IF
+TimerFinished("ToSecondLevelTimer")
+AND
+DB_IsPlayer(_character)
+THEN
+CharacterTeleportPartiesToTrigger(SecondLevelTeleportTrigger_5b9a147b-bf5b-4988-8f91-61412673c3d8, "");
+PlayEffect(_character, "RS3_FX_Skills_Air_FreeFall_Reappear_01");
+GlobalSetFlag("TELEPORTAFTERSTARTSECONDLEVEL");
+
+
+
+IF
+CharacterUsedItemTemplate(_character, "TRHU_GoHome_Pipe_Level_Three_f14d842e-f0e9-410c-a475-34e5f8f70049", _item)
+THEN
+//PROC_TeleportPipe(_character, "ToWikLevelThreeTimer", "I wonder if Wik will let me keep some of this...", WikAtmosphereLevelThreeTrigger_ec9f5603-0685-8c5c-2a56-d16fcdc057af, "7fb26de2-0c27-4f08-8032-de123d78780a", HuntingGroundsAtmosphereTrigger_f6fedc70-ce8d-4c45-93f8-c3e6ab5bae2b, "28ae9a54-cedc-478b-9a68-1dc14ee47b12");
+DisplayText(_character, "I wonder if Wik will let me keep some of this...");
+PlayEffect(_character, "RS3_FX_Skills_Divine_BlindingRadiance_Cast_Root_01");
+PlayEffect(_character, "RS3_FX_GP_Status_Item_HolyFire_01");
+PlayEffect(_character, "RS3_FX_Skills_Air_Lightning_Cast_Hand_Horizontal_01");
+TriggerSetAtmosphere(WikAtmosphereLevelThreeTrigger_ec9f5603-0685-8c5c-2a56-d16fcdc057af, "7fb26de2-0c27-4f08-8032-de123d78780a");
+TriggerSetAtmosphere(HuntingGroundsAtmosphereTrigger_f6fedc70-ce8d-4c45-93f8-c3e6ab5bae2b, "28ae9a54-cedc-478b-9a68-1dc14ee47b12");
+CloseUI((CHARACTERGUID)_character, "Inventory");
+//TimerLaunch("WikTalkLevelThreeTimer", 15000);
+//GlobalClearFlag("TELEPORTAFTERSTARTSECONDLEVEL");
+TimerLaunch("ToWikLevelThreeTimer", 4100);
+
+
+//Back to Wik from Hunting Grounds 
+IF
+TimerFinished("ToWikLevelThreeTimer")
+AND
+DB_IsPlayer(_character)
+THEN
+CharacterTeleportPartiesToTrigger(ThirdLevelTeleportTrigger_e2664984-a1c3-430f-ad01-77cf2e5700fb, "");
+PlayEffect(_character, "RS3_FX_Skills_Air_FreeFall_Reappear_01");
+
+IF
+TimerFinished("WikTalkLevelThreeTimer")
+AND
+DB_IsPlayer(_character)
+AND
+GlobalGetFlag("WIKTHANKSSECONDMISSION", 0)
+THEN
+CharacterMoveToAndTalk(TRHU_Wik_Level_Three_84d9e81d-aba7-854c-3a43-d7e96b47900f, _character, "WikSecondMissionClose", 1,"", 0, 20.0);
+QuestClose(_character, "AddVaccineToFood");
+
+
+
+//Cave Entrance
+IF
+CharacterUsedItem(_character, DragonCaveEntrance_394516e6-1b62-41f5-a97d-4be07f640d8d)
+THEN
+TeleportTo(_character, InsideDragonCaveTeleportTrigger_f7279b65-37fd-4c9b-aac5-00e78a585f39, "", 1, 0, 1);
+
+
+EXITSECTION
+
+ENDEXITSECTION
+ParentTargetEdge "__Start"

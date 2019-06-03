@@ -1,0 +1,56 @@
+Version 1
+SubGoalCombiner SGC_AND
+INITSECTION
+DB_CheckLevelStart("LevelOne");
+
+GlobalSetFlag("FireTotemsOn");
+
+DB_Dialogs(TRHU_Wik_000_3091a068-26e4-4ed1-9a3e-60833819bbc3, "WikIntro");
+DB_Dialogs(TRHU_Wik_000_3091a068-26e4-4ed1-9a3e-60833819bbc3, "WikSecondMission");
+DB_Dialogs(TRHU_Wik_000_3091a068-26e4-4ed1-9a3e-60833819bbc3, "WikSecondMissionClose");
+DB_Dialogs(TRHU_Dragon_Nanny_002_aff76409-b2dc-41a7-bfe0-647da4b8309c, "dragonnanny");
+DB_Dialogs(TRHU_Dragon_Nanny_002_aff76409-b2dc-41a7-bfe0-647da4b8309c, "ApplyVaccineToEgg");
+DB_Dialogs(TRHU_Wik_000_3091a068-26e4-4ed1-9a3e-60833819bbc3, "FirstSleep");
+
+SetVarString(Radio_ad90bf57-4942-4e21-bd61-cc624d925003, "KonamiAttempt", "");
+
+DB_SleepAttackers_One(CHARACTERGUID_TRHU_Nightmare_000_25cac855-dc0a-4a09-adcb-17e462a9a202);
+DB_SleepAttackers_Two(CHARACTERGUID_TRHU_Nightmare_003_c6e98586-0216-4ebe-8df8-a1b3d3a4be87);
+DB_SleepAttackers_Two(CHARACTERGUID_TRHU_Nightmare_001_af500e03-5c46-41ee-8d28-3e11af733586);
+DB_SleepAttackers_Three(CHARACTERGUID_TRHU_Nightmare_004_d169f1d9-a941-423c-b033-58605a1ea8c4);
+DB_SleepAttackers_Three(CHARACTERGUID_TRHU_Nightmare_002_8a3495fa-0068-40c1-8d96-611f6b05f343);
+DB_SleepAttackers_Three(CHARACTERGUID_TRHU_Nightmare_005_c365c9ca-fc9c-49b7-9220-ffd4a92ef47a);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_006_ffd01fd6-aecd-4797-b0a8-de4ea5438a6e);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_007_6d199f7a-64df-46a8-aafb-afef8322984c);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_008_76aa883b-0cf5-4cb9-a6bd-46b1bfcd1934);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_009_b027e462-d9c7-4ff5-931d-512f997f53a2);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_010_2da63833-6ca3-40ad-9512-77ec598b8e83);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_011_371f3e57-16f8-4f81-8845-eb1e11497633);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_012_22578e06-076d-4687-9311-0a843908cc7a);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_013_263da3b4-d995-4abf-9d47-2194a7fd82ad);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_014_8efd2874-8d13-4e64-ba13-c32b5ca2a3d5);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_015_927a7ddb-b528-4d9a-aea3-f6516e54ca4a);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_016_c6dae2a0-2aed-4371-ba01-e9f33c3e09ee);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_017_a18ef770-3674-4c54-b6db-261eac042df8);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_018_f70bd27e-33bd-469e-bc5d-23a0820b0983);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_019_e692219f-7199-4740-af42-614bec5cc7bd);
+DB_SleepAttackers(CHARACTERGUID_TRHU_Nightmare_020_c4363369-8f40-4bda-ab16-c02ad549a9d9);
+
+KBSECTION
+IF
+RegionStarted("LevelOne")
+THEN
+GoalCompleted;
+
+IF DB_CheckLevelStart("LevelOne")
+AND
+DB_CurrentLevel("LevelOne")
+THEN
+GoalCompleted;
+
+
+
+EXITSECTION
+NOT DB_CheckLevelStart("LevelOne");
+ENDEXITSECTION
+ParentTargetEdge "__Start"
